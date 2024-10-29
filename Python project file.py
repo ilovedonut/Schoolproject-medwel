@@ -93,8 +93,19 @@ def get_user_first_value(username):
         return result[0]  # Return the value of the "1st" column
     else:
         return None 
+def check_username_exists(username):
+    query = "SELECT COUNT(*) FROM users WHERE username = %s"
+    cursor.execute(query, (username,))
+    count = cursor.fetchone()[0]
+    return count > 0
 def create_account():
     username = input("Enter a username: ")
+    if check_username_exists(username):
+        print("Username already exists. Please choose a different username.")
+        time.sleep(1)
+        print("\n \n")
+        time.sleep(1)
+        return
     password = input("Enter a password: ")
     email = input("Enter an email: ")
     area = input("enter your pincode")
@@ -141,6 +152,7 @@ def doctor_list(pin):
 def new_email(new):
     print("feature still in development ")
 while True:
+    print("\n|MEDWELL| - the future of health communication\n")
     print("1. Create an account")
     print("2. Login")
     choice = input("Enter your choice: ")
