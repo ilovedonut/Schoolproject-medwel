@@ -18,7 +18,8 @@ cursor.execute("""
                     role VARCHAR(20) NOT NULL DEFAULT 'patient',
                     password VARCHAR(255) NOT NULL,
                     first INT(20) DEFAULT 1,
-                    email VARCHAR(100) NOT NULL,
+                    area VARCHAR(20) NOT NULL,
+                    email VARCHAR(100) ,
                     notifs INT DEFAULT 1
          )
                
@@ -76,15 +77,13 @@ def notif_grab(username):
         return result[0]  
     else:
         return None
-    
 def update_user_first_value(username, new_value):
 
     query = "UPDATE users SET first = %s WHERE username = %s"
     cursor.execute(query, (new_value, username))
 
     conn.commit()
-    print(f"Updated first value for user {username} to {new_value}")
-    
+    print(f"Updated first value for user {username} to {new_value}")   
 def get_user_first_value(username):
     query = "SELECT first FROM users WHERE username = %s"
     cursor.execute(query, (username,))
@@ -94,21 +93,20 @@ def get_user_first_value(username):
         return result[0]  # Return the value of the "1st" column
     else:
         return None 
-
 def create_account():
     username = input("Enter a username: ")
     password = input("Enter a password: ")
     email = input("Enter an email: ")
+    area = input("enter your pincode")
     time.sleep(1)
     print("\n registering user \n")
     time.sleep(2)
     cursor.execute("""
-        INSERT INTO users (username, password, email)
-        VALUES (%s, %s, %s)
-    """, (username, password, email))
+        INSERT INTO users (username, password, email, area)
+        VALUES (%s, %s, %s, %s)
+    """, (username, password, email, area))
     print(" succesful \n")
     conn.commit()
-
 def login():
     global username
     username = input("Enter your username: ")
@@ -119,14 +117,12 @@ def login():
         WHERE username = %s AND password = %s
     """, (username, password))
     user = cursor.fetchone()
-
 def delete_account(username):
     query = "DELETE FROM users WHERE username = %s"
     cursor.execute(query, (username,))
 
     conn.commit()
     print(f"Account for {username} deleted successfully!")
-
 def get_user_id(username):
     cursor.execute("SELECT id FROM users WHERE username = %s", (username,))
     result = cursor.fetchone()
@@ -137,7 +133,13 @@ def get_doctor_info(doctor_id):
     cursor.execute(query, (doctor_id,))
     doctor_info = cursor.fetchone()
     return doctor_info
-
+def doctor_list(pin):
+     query = "SELECT username,role,email,area FROM users WHERE area = %s AND role = 'doctor' "
+     cursor.execute(query,(pin,))
+     doctor_info = cursor.fetchall()
+     return doctor_info 
+def new_email(new):
+    print("feature still in development ")
 while True:
     print("1. Create an account")
     print("2. Login")
@@ -174,29 +176,68 @@ if get_user_first_value(username) == 1 :
   else:
       print("role changed to patient")
       update_user_first_value(username,"2")         
-time.sleep(2)
+time.sleep(0.5)
 print("loading user complete")
 notif = notif_grab(username)
-time.sleep(2)
+time.sleep(0.5)
 print("loading functionality")
-time.sleep(2)
+time.sleep(0.5)
 print("__________________________")
 print("Welcome back to medwel")
-time.sleep(2)
+time.sleep(0.6)
 if notif >= 1 :
     print(f"\n \n  You have {notif-1} new notifications \n \n ")
+if get_user_role(username) == "doctor":
+ while True:
+  print("__________________________")
+  print("     Main Menu     ")
+  print("enter number according to desired selection")
+  print("1 - read notification")
+  print("2 - enter patient medwel id")
+  print("3 - change email")
+  print("4 - get a list of doctors")
+  print("5 - send feedback to a connected patient")
+  menu = int(input("enter number - "))
+  if menu == 2:
+   doc78 = input("enter you patients medwel id - ")
+   print("are you sure about your choice? enter yes or no \n ")
+   po = input("")
+   if po == "yes":
+      print("connecting to doctor \n")
+      time.sleep(1)
+      
+      save_doctor_id(doc78 , get_user_id(username))
+      print("connection succesful \n")
+      print("YOUR PATIENTS INFO - ",get_doctor_info(doc78),"\n\n")
+
+      time.sleep(3)
+   elif po == "no" :
+       print("ABORTING \n")
+       continue
+   else:
+      print("\n enter a valid response \n")
+      time.sleep(1)
+      continue
+  elif menu == 4:
+      input_area = input("enter pincode to search for doctors - ")
+      print("list of doctors - \n")
+      print(doctor_list(input_area))
+      varuseless = input(print(" \n \n TO GO BACK ENTER ANYTHING - "))
+  elif menu == 3:
+      email_new = input("enter new email - ")  
+      new_email(email_new)  
 if get_user_role(username) == "patient":
  while True:
-
+  print("__________________________")
   print("     Main Menu     ")
   print("enter number according to desired selection")
   print("1 - read notification")
   print("2 - connect with a doctor")
-  print("3 - customize user id")
+  print("3 - customize email id")
   print("4 - get a list of doctors")
   print("5 - send feedback to a connected doctor")
   print("6 - enter your current medicne routine/ prescription")
-  menu = input("enter number - ")
+  menu = int(input("enter number - "))
   if menu == 2:
    doc78 = input("enter you doctors medwel id - ")
    print("are you sure about your choice? enter yes or no \n ")
@@ -217,3 +258,11 @@ if get_user_role(username) == "patient":
       print("\n enter a valid response \n")
       time.sleep(1)
       continue
+  elif menu == 4:
+      input_area = input("enter pincode to search for doctors -")
+      print("list of doctors - \n")
+      print(doctor_list(input_area))
+      varuseless = input(print(" \n \n TO GO BACK ENTER ANYTHING - "))
+  elif menu == 3:
+      email_new = input("enter new email")  
+      new_email(email_new)
