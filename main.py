@@ -1,7 +1,28 @@
 from function import *
 import time
 import init
+import os
+import subprocess
+import sys
 
+def check_requirements():
+    if not os.path.isfile("requirements.txt"):
+        print("Error: requirements.txt not found. Exiting program.")
+        sys.exit(1)
+
+    with open("requirements.txt") as f:
+        packages = f.read().splitlines()
+
+    for package in packages:
+        try:
+            __import__(package.split('==')[0])
+        except ImportError:
+            print(f"{package} not found. Installing...")
+            subprocess.check_call([sys.executable, "-m", "pip", "install", package])
+
+    print("All requirements are satisfied.")
+    
+check_requirements()
 
 while True:
     print("\n|MEDWELL| - the future of health communication\n")

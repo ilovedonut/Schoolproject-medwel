@@ -1,6 +1,6 @@
 import mysql.connector
 import time
-
+import bcrypt
 
 def connect_to_database(host, user, password,port, database=None,):
     global conn
@@ -104,6 +104,7 @@ def create_account():
         time.sleep(1)
         return
     password = input("Enter a password: ")
+    hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
     email = input("Enter an email: ")
     if check_email_exists(email):
         print("Email already exists. Please choose a different email.")
@@ -120,7 +121,7 @@ def create_account():
         INSERT INTO users (username, password, email, area)
         VALUES (%s, %s, %s, %s)
     """,
-        (username, password, email, area),
+        (username, hashed_password, email, area),
     )
     print(" succesful \n")
     conn.commit()
@@ -133,13 +134,15 @@ def login():
     global user
     cursor.execute(
         """
-        SELECT * FROM users
-        WHERE username = %s AND password = %s
+        SELECT password FROM users
+        WHERE username = %s
     """,
-        (username, password),
+        (username,),
     )
     user = cursor.fetchone()
-    return user
+    if bcrypt.checkpw(password.encode('utf-8'), user[0].encode('utf-8')):
+        return user
+    return None
 
 
 def delete_account(username):
