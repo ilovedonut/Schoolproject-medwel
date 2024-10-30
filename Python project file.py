@@ -98,6 +98,11 @@ def check_username_exists(username):
     cursor.execute(query, (username,))
     count = cursor.fetchone()[0]
     return count > 0
+def check_email_exists(email):
+    query = "SELECT COUNT(*) FROM users WHERE email = %s"
+    cursor.execute(query, (email,))
+    count = cursor.fetchone()[0]
+    return count > 0
 def create_account():
     username = input("Enter a username: ")
     if check_username_exists(username):
@@ -108,6 +113,12 @@ def create_account():
         return
     password = input("Enter a password: ")
     email = input("Enter an email: ")
+    if check_email_exists(email):
+        print("Email already exists. Please choose a different email.")
+        time.sleep(1)
+        print("\n \n")
+        time.sleep(1)
+        return
     area = input("enter your pincode")
     time.sleep(1)
     print("\n registering user \n")
@@ -151,6 +162,30 @@ def doctor_list(pin):
      return doctor_info 
 def new_email(new):
     print("feature still in development ")
+def display_messages_with_senders(user_id):
+    query = """
+    SELECT m.message_text, m.created_at, u.username 
+    FROM messages m 
+    JOIN users u ON m.sender_id = u.id 
+    WHERE m.recipient_id = %s
+    ORDER BY m.created_at DESC
+    """
+    cursor.execute(query, (user_id,))
+    messages = cursor.fetchall()
+    
+    if not messages:
+        print("\nNo messages found.\n")
+        time.sleep(2)
+        return
+
+    for message in messages:
+        message_text, created_at, sender_username = message
+        print(f"[{created_at}] {sender_username}: {message_text}")
+def send_message(sender_id, recipient_id, message_text):
+    query = "INSERT INTO messages (sender_id, recipient_id, message_text) VALUES (%s, %s, %s)"
+    cursor.execute(query, (sender_id, recipient_id, message_text))
+    conn.commit()
+    print("Message sent successfully!")        
 while True:
     print("\n|MEDWELL| - the future of health communication\n")
     print("1. Create an account")
@@ -210,6 +245,12 @@ if get_user_role(username) == "doctor":
   print("4 - get a list of doctors")
   print("5 - send feedback to a connected patient")
   menu = int(input("enter number - "))
+  if menu == 5:       
+       doctor_id = input("Enter your patient's Medwel ID: ")
+       message_text = input("Enter your message: ")
+       sender_id = get_user_id(username)  # Get the sender's ID
+       recipient_id = doctor_id  # Assuming the doctor ID is the recipient ID
+       send_message(sender_id, recipient_id, message_text)
   if menu == 2:
    doc78 = input("enter you patients medwel id - ")
    print("are you sure about your choice? enter yes or no \n ")
@@ -247,9 +288,17 @@ if get_user_role(username) == "patient":
   print("2 - connect with a doctor")
   print("3 - customize email id")
   print("4 - get a list of doctors")
-  print("5 - send feedback to a connected doctor")
+  print("5 - send feedback/message to a connected doctor")
   print("6 - enter your current medicne routine/ prescription")
   menu = int(input("enter number - "))
+  if menu == 1:
+      display_messages_with_senders(get_user_id(username))
+  if menu == 5:       
+       doctor_id = input("Enter your doctor's Medwel ID: ")
+       message_text = input("Enter your message: ")
+       sender_id = get_user_id(username)  # Get the sender's ID
+       recipient_id = doctor_id  # Assuming the doctor ID is the recipient ID
+       send_message(sender_id, recipient_id, message_text)
   if menu == 2:
    doc78 = input("enter you doctors medwel id - ")
    print("are you sure about your choice? enter yes or no \n ")
