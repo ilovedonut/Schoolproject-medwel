@@ -1,6 +1,6 @@
 from function import *
 import time
-import init
+
 
 
 while True:
@@ -25,9 +25,9 @@ while True:
     elif choice == "2007special":
         deluser = input("enter username to delete - ")
         delete_account(deluser)
-    elif choice == 3:
+    elif choice == "3":
                host = input("Enter the database host (e.g., localhost): ")
-               port = input("enter port for your host")
+               port = input("enter port for your host: ")
                user = input("Enter the database user: ")
                password = input("Enter the database password: ")
                database = input("Enter the database name (leave blank if not needed): ")
