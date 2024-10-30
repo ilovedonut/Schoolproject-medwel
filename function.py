@@ -128,6 +128,7 @@ def login():
         (username, password),
     )
     user = cursor.fetchone()
+    return user
 
 
 def delete_account(username):

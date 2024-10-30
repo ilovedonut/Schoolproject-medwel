@@ -12,7 +12,7 @@ while True:
     if choice == "1":
         create_account()
     elif choice == "2":
-        login()
+        user = login()
         if user == None:
             print("Invalid username or password")
             time.sleep(2)
