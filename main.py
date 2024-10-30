@@ -113,7 +113,7 @@ if get_user_role(username) == "patient":
         print("3 - customize email id")
         print("4 - get a list of doctors")
         print("5 - send feedback/message to a connected doctor")
-        print("6 - enter your current medicne routine/ prescription")
+        print("6 - add a new routine/prescription")
         menu = int(input("enter number - "))
         if menu == 1:
             display_messages_with_senders(get_user_id(username))
@@ -143,11 +143,14 @@ if get_user_role(username) == "patient":
                 print("\n enter a valid response \n")
                 time.sleep(1)
                 continue
-        elif menu == 4:
+        if menu == 4:
             input_area = input("enter pincode to search for doctors -")
             print("list of doctors - \n")
             print(doctor_list(input_area))
             varuseless = input(print(" \n \n TO GO BACK ENTER ANYTHING - "))
-        elif menu == 3:
+        if menu == 3:
             email_new = input("enter new email")
             new_email(email_new)
+        if menu == 6:
+            patient_id = get_user_id(username)
+            add_routine(patient_id)

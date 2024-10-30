@@ -43,3 +43,16 @@ cursor.execute(
     )
 """
 )
+cursor.execute(
+    """
+    CREATE TABLE IF NOT EXISTS Routines (
+        patient_id INT NOT NULL,
+        routine_description TEXT NOT NULL,
+        routine_type VARCHAR(50),
+        start_date DATE,
+        end_date DATE,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (patient_id) REFERENCES users(id)
+    )
+"""
+)

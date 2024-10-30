@@ -189,3 +189,24 @@ def send_message(sender_id, recipient_id, message_text):
     cursor.execute(query, (sender_id, recipient_id, message_text))
     conn.commit()
     print("Message sent successfully!")
+
+def add_routine(patient_id):
+    routine_description = input("Enter routine description: ")
+    routine_type = input("Enter routine type (e.g., medication, exercise): ")
+    start_date = input("Enter start date (YYYY-MM-DD): ")
+    end_date = input("Enter end date (YYYY-MM-DD) or leave blank: ")
+
+    # If end_date is not provided, set it to None
+    if end_date == "":
+        end_date = None
+
+    # Insert the routine into the database
+    cursor.execute(
+        """
+        INSERT INTO Routines (patient_id, routine_description, routine_type, start_date, end_date)
+        VALUES (%s, %s, %s, %s, %s)
+        """,
+        (patient_id, routine_description, routine_type, start_date, end_date)
+    )
+    db.commit()  # Commit the changes to the database
+    print("Routine added successfully!")    
