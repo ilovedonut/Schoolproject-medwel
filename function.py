@@ -4,6 +4,7 @@ import bcrypt
 
 def connect_to_database(host, user, password,port, database=None,):
     global conn
+    global cursor
     try:
         conn = mysql.connector.connect(
             host=host,
@@ -14,13 +15,14 @@ def connect_to_database(host, user, password,port, database=None,):
             port=port
         )
         print("Connection to database successful!")
-        
+        cursor=conn.cursor
+        import init
         return conn
     except mysql.connector.Error as err:
         print(f"Error: {err}")
         return None
 
-cursor = conn.cursor()
+
 def save_doctor_id(user_id, doctor_id):
     query = "INSERT INTO medical (id, doctors) VALUES (%s, %s) ON DUPLICATE KEY UPDATE doctors = %s"
     cursor.execute(query, (user_id, doctor_id, doctor_id))
