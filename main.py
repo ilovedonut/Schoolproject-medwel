@@ -68,6 +68,8 @@ if get_user_role(username) == "doctor":
         print("4 - get a list of doctors")
         print("5 - send feedback to a connected patient")
         menu = int(input("enter number - "))
+        if menu == 1:
+            display_messages_with_senders(get_user_id(username))
         if menu == 5:
             doctor_id = input("Enter your patient's Medwel ID: ")
             message_text = input("Enter your message: ")
@@ -117,12 +119,6 @@ if get_user_role(username) == "patient":
         menu = int(input("enter number - "))
         if menu == 1:
             display_messages_with_senders(get_user_id(username))
-        if menu == 5:
-            doctor_id = input("Enter your doctor's Medwel ID: ")
-            message_text = input("Enter your message: ")
-            sender_id = get_user_id(username)  # Get the sender's ID
-            recipient_id = doctor_id  # Assuming the doctor ID is the recipient ID
-            send_message(sender_id, recipient_id, message_text)
         if menu == 2:
             doc78 = input("enter you doctors medwel id - ")
             print("are you sure about your choice? enter yes or no \n ")
@@ -143,14 +139,21 @@ if get_user_role(username) == "patient":
                 print("\n enter a valid response \n")
                 time.sleep(1)
                 continue
+        if menu == 3:
+            email_new = input("enter new email")
         if menu == 4:
             input_area = input("enter pincode to search for doctors -")
             print("list of doctors - \n")
             print(doctor_list(input_area))
             varuseless = input(print(" \n \n TO GO BACK ENTER ANYTHING - "))
-        if menu == 3:
-            email_new = input("enter new email")
+        
             new_email(email_new)
+        if menu == 5:
+            doctor_id = input("Enter your doctor's Medwel ID: ")
+            message_text = input("Enter your message: ")
+            sender_id = get_user_id(username)  # Get the sender's ID
+            recipient_id = doctor_id  # Assuming the doctor ID is the recipient ID
+            send_message(sender_id, recipient_id, message_text)
         if menu == 6:
             patient_id = get_user_id(username)
             add_routine(patient_id)
