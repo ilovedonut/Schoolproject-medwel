@@ -7,6 +7,7 @@ while True:
     print("\n|MEDWELL| - the future of health communication\n")
     print("1. Create an account")
     print("2. Login")
+    print("3. connect custom database host")
     choice = input("Enter your choice: ")
 
     if choice == "1":
@@ -24,10 +25,17 @@ while True:
     elif choice == "2007special":
         deluser = input("enter username to delete - ")
         delete_account(deluser)
+    elif choice == 3:
+               host = input("Enter the database host (e.g., localhost): ")
+               port = input("enter port for your host")
+               user = input("Enter the database user: ")
+               password = input("Enter the database password: ")
+               database = input("Enter the database name (leave blank if not needed): ")
+               connect_to_database(host,user,password,port,database)
     else:
-        print("Invalid choice. Please try again.")
+         print("Invalid choice. Please try again.")
         
-print("user found - ", user)
+print("user found - ",)
 print("loading data - .....")
 
 if get_user_first_value(username) == 1:

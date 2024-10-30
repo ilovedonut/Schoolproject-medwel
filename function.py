@@ -1,15 +1,26 @@
 import mysql.connector
 import time
 
-conn = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    passwd="admin",
-    auth_plugin="mysql_native_password",
-)
+
+def connect_to_database(host, user, password,port, database=None,):
+    global conn
+    try:
+        conn = mysql.connector.connect(
+            host=host,
+            user=user,
+            passwd=password,
+            database=database,
+            auth_plugin="mysql_native_password",
+            port=port
+        )
+        print("Connection to database successful!")
+        
+        return conn
+    except mysql.connector.Error as err:
+        print(f"Error: {err}")
+        return None
+
 cursor = conn.cursor()
-
-
 def save_doctor_id(user_id, doctor_id):
     query = "INSERT INTO medical (id, doctors) VALUES (%s, %s) ON DUPLICATE KEY UPDATE doctors = %s"
     cursor.execute(query, (user_id, doctor_id, doctor_id))
@@ -209,5 +220,5 @@ def add_routine(patient_id):
         """,
         (patient_id, routine_description, routine_type, start_date, end_date)
     )
-    db.commit()  # Commit the changes to the database
+    conn.commit()  # Commit the changes to the database
     print("Routine added successfully!")    
