@@ -1,10 +1,11 @@
-
 import function as fn
+
 cursor = fn.cursor
 
 cursor.execute("CREATE DATABASE IF NOT EXISTS user_ids")
 cursor.execute("USE user_ids")
-cursor.execute("""
+cursor.execute(
+    """
     CREATE TABLE IF NOT EXISTS users (
                     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
                     username VARCHAR(50) NOT NULL,
@@ -16,8 +17,10 @@ cursor.execute("""
                     notifs INT DEFAULT 1
          )
                
-""")
-cursor.execute("""
+"""
+)
+cursor.execute(
+    """
     CREATE TABLE IF NOT EXISTS medical (
                id INT references users.id ,
                med_data varchar(100) ,
@@ -26,8 +29,10 @@ cursor.execute("""
                      
          )
                
-""")
-cursor.execute("""
+"""
+)
+cursor.execute(
+    """
     CREATE TABLE IF NOT EXISTS messages (
         id INT AUTO_INCREMENT,
         sender_id INT,
@@ -36,4 +41,5 @@ cursor.execute("""
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         PRIMARY KEY (id)
     )
-""")  
+"""
+)
