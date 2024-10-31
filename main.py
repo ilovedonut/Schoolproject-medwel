@@ -1,6 +1,5 @@
 from function import *
 import time
-import init
 import os
 import subprocess
 import sys
@@ -49,9 +48,9 @@ while True:
         delete_account(deluser)
     elif choice == "3":
                host = input("Enter the database host (e.g., localhost): ")
-               port = input("enter port for your host: ")
-               user = input("Enter the database user: ")
-               password = input("Enter the database password: ")
+               port = int(input("enter port for your host(e.g, 3306): "))
+               user = input("Enter the database user: (eg, root) ")
+               password = input("Enter the database password: (eg, admin)")
                database = input("Enter the database name (leave blank if not needed): ")
                connect_to_database(host,user,password,port,database)
     else:
