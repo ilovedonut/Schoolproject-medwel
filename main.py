@@ -32,8 +32,11 @@ while True:
     choice = input("Enter your choice: ")
 
     if choice == "1":
+        connect_to_database(load_database_config)
         create_account()
+        
     elif choice == "2":
+        connect_to_database(load_database_config)
         user = login()
         if user == None:
             print("Invalid username or password")
@@ -52,7 +55,7 @@ while True:
                user = input("Enter the database user: (eg, root) ")
                password = input("Enter the database password: (eg, admin)")
                database = input("Enter the database name (leave blank if not needed): ")
-               connect_to_database(host,user,password,port,database)
+               save_database_config(host,user,password,port,database)
     else:
          print("Invalid choice. Please try again.")
         

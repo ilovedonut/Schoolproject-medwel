@@ -1,6 +1,9 @@
 import mysql.connector
 import time
+import csv
+import os
 
+CONFIG_FILE = 'database_config.csv'
 
 def connect_to_database(host="localhost", user="root", password="admin", port=3306, database=None):
         global conn
@@ -18,8 +21,29 @@ def connect_to_database(host="localhost", user="root", password="admin", port=33
         import init
         time.sleep(1)
         return conn
+def save_database_config(host, user, password, port, database):
+    
+    with open(CONFIG_FILE, 'w', newline='') as f:
+        writer = csv.writer(f)
+        writer.writerow(['host', 'user', 'password', 'port', 'database'])
+        writer.writerow([host, user, password, port, database])
 
-        
+def load_database_config():
+    
+    if os.path.exists(CONFIG_FILE):
+        with open(CONFIG_FILE, 'r') as f:
+            reader = csv.reader(f)
+            next(reader)  # Skip header row
+            row = next(reader, None)
+            if row:
+                return {
+                    'host': row[0],
+                    'user': row[1],
+                    'password': row[2],
+                    'port': int(row[3]),
+                    'database': row[4]
+                }
+    return None        
 
 
 def save_doctor_id(user_id, doctor_id):
@@ -131,7 +155,6 @@ def login():
     global username
     username = input("Enter your username: ")
     password = input("Enter your password: ")
-    global user
     cursor.execute(
         """
         SELECT * FROM users

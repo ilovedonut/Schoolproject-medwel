@@ -1,0 +1,2 @@
+host,user,password,port,database
+localhost,root,admin,3306,
