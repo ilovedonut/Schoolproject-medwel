@@ -39,7 +39,7 @@ while True:
     elif choice == "2":
         connect_to_database()      
         user = login()
-        from function import username
+        from function import *
         if user == None:
             print("Invalid username or password")
             time.sleep(2)
