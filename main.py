@@ -1,4 +1,3 @@
-from function import *
 import time
 import os
 import subprocess
@@ -23,8 +22,12 @@ def check_requirements():
     print("All requirements are satisfied.")
     
 check_requirements()
+from function import *
+
 
 while True:
+    result = load_database_config()
+    print(result)
     print("\n|MEDWELL| - the future of health communication\n")
     print("1. Create an account")
     print("2. Login")
@@ -32,11 +35,11 @@ while True:
     choice = input("Enter your choice: ")
 
     if choice == "1":
-        connect_to_database(load_database_config)
+        connect_to_database()
         create_account()
         
     elif choice == "2":
-        connect_to_database(load_database_config)
+        connect_to_database()
         user = login()
         if user == None:
             print("Invalid username or password")

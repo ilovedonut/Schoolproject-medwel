@@ -5,16 +5,17 @@ import os
 
 CONFIG_FILE = 'database_config.csv'
 
-def connect_to_database(host="localhost", user="root", password="admin", port=3306, database=None):
+def connect_to_database():
         global conn
         global cursor
+        config = load_database_config()
         conn = mysql.connector.connect(
-            host=host,
-            user=user,
-            passwd=password,
-            database=database,
-            auth_plugin="mysql_native_password",
-            port=port)
+        host=config['host'],
+        user=config['user'],
+        password=config['password'],
+        port=config['port'],
+        database=config['database']
+        )
         print("Connection to database successful!")
         cursor = conn.cursor()
         print(cursor)
