@@ -18,7 +18,6 @@ def connect_to_database():
         )
         print("Connection to database successful!")
         cursor = conn.cursor()
-        print(cursor)
         import init
         time.sleep(1)
         return conn
@@ -67,8 +66,9 @@ def get_messages(user_id):
 
 
 def get_user_role(username):
-    query = "SELECT role FROM users WHERE username = %s"
-    cursor.execute(query, (username,))
+    user_id = get_user_id(username)
+    query = "SELECT role FROM users WHERE id = %s"
+    cursor.execute(query, (user_id,))
     result = cursor.fetchone()
     if result:
         return result[0]
@@ -77,15 +77,14 @@ def get_user_role(username):
 
 
 def notif_grab(username):
-    query = "SELECT notifs FROM users WHERE username = %s"
-    cursor.execute(query, (username,))
-    result = cursor.fetchone()
-    if result:
-
-        return result[0]
-    else:
-        return None
-
+    try:
+        user_id = get_user_id(username)
+        cursor.execute("SELECT notifs FROM users WHERE id = %s", (user_id,))
+        result = cursor.fetchone()
+        return result[0] if result else 0
+    except Exception as e:
+        print(f"Error in notif_grab: {e}")
+        return 0
 
 def update_user_first_value(username, new_value):
 
@@ -154,7 +153,7 @@ def create_account():
 
 def login():
     global username
-    username = input("Enter your username: ")
+    username = input("Confirm your username: ")
     password = input("Enter your password: ")
     cursor.execute(
         """
@@ -164,7 +163,7 @@ def login():
         (username, password),
     )
     user = cursor.fetchone()
-    return user
+    return username
 
 
 def delete_account(username):

@@ -1,2 +1,2 @@
 host,user,password,port,database
-localhost,root,admin,3306,
+localhost,root,admin,3306,user_ids

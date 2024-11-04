@@ -26,8 +26,6 @@ from function import *
 
 
 while True:
-    result = load_database_config()
-    print(result)
     print("\n|MEDWELL| - the future of health communication\n")
     print("1. Create an account")
     print("2. Login")
@@ -39,8 +37,9 @@ while True:
         create_account()
         
     elif choice == "2":
-        connect_to_database()
+        connect_to_database()      
         user = login()
+        from function import username
         if user == None:
             print("Invalid username or password")
             time.sleep(2)
@@ -55,8 +54,8 @@ while True:
     elif choice == "3":
                host = input("Enter the database host (e.g., localhost): ")
                port = int(input("enter port for your host(e.g, 3306): "))
-               user = input("Enter the database user: (eg, root) ")
-               password = input("Enter the database password: (eg, admin)")
+               user = input("Enter the database user: (eg, root): ")
+               password = input("Enter the database password: (eg, admin): ")
                database = input("Enter the database name (leave blank if not needed): ")
                save_database_config(host,user,password,port,database)
     else:
@@ -88,8 +87,8 @@ time.sleep(0.5)
 print("__________________________")
 print("Welcome back to medwel")
 time.sleep(0.6)
-
 if notif >= 1:
+    
     print(f"\n \n  You have {notif-1} new notifications \n \n ")
     
 if get_user_role(username) == "doctor":
@@ -139,7 +138,7 @@ if get_user_role(username) == "doctor":
         elif menu == 3:
             email_new = input("enter new email - ")
             new_email(email_new)
-            
+print(get_user_role(username))      
 if get_user_role(username) == "patient":
     while True:
         print("__________________________")
