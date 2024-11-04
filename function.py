@@ -15,6 +15,7 @@ def connect_to_database(host="localhost", user="root", password="admin", port=33
         print("Connection to database successful!")
         cursor = conn.cursor()
         print(cursor)
+        import init
         time.sleep(1)
         return conn
 
