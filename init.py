@@ -1,6 +1,7 @@
-import function as fn
+import function as fn 
 
-cursor = fn.cursor
+
+cursor =  fn.cursor
 
 cursor.execute("CREATE DATABASE IF NOT EXISTS user_ids")
 cursor.execute("USE user_ids")

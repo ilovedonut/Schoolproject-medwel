@@ -3,24 +3,22 @@ import time
 
 
 def connect_to_database(host="localhost", user="root", password="admin", port=3306, database=None):
-    global conn
-    global cursor
-    try:
+        global conn
+        global cursor
         conn = mysql.connector.connect(
             host=host,
             user=user,
             passwd=password,
             database=database,
             auth_plugin="mysql_native_password",
-            port=port
-        )
+            port=port)
         print("Connection to database successful!")
-        cursor=conn.cursor
-        import init
+        cursor = conn.cursor()
+        print(cursor)
+        time.sleep(1)
         return conn
-    except mysql.connector.Error as err:
-        print(f"Error: {err}")
-        return None
+
+        
 
 
 def save_doctor_id(user_id, doctor_id):
