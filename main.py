@@ -35,7 +35,7 @@ while True:
     if choice == "1":
         connect_to_database()
         create_account()
-        
+        import init
     elif choice == "2":
         connect_to_database()      
         user = login()
